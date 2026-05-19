@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cloud Security Quest</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at top, #1f3b73, #070b16 55%, #03050a);
+      color: #f4f7fb;
+      overflow-x: hidden;
+    }
+
+    .page {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 32px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1160px;
+      display: grid;
+      grid-template-columns: 1fr 1.12fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .hero, .card {
+      background: rgba(9, 15, 30, 0.82);
+      border: 1px solid rgba(125, 187, 255, 0.18);
+      border-radius: 30px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .terminal-rain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      opacity: 0.28;
+    }
+
+    .terminal-rain span {
+      position: absolute;
+      color: rgba(125, 211, 252, 0.36);
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      white-space: nowrap;
+      animation: rainMove 16s linear infinite;
+    }
+
+    .terminal-rain span:nth-child(1) { left: 4%; top: 12%; animation-delay: 0s; }
+    .terminal-rain span:nth-child(2) { left: 62%; top: 18%; animation-delay: 1.8s; }
+    .terminal-rain span:nth-child(3) { left: 22%; top: 78%; animation-delay: 3.1s; }
+    .terminal-rain span:nth-child(4) { left: 74%; top: 52%; animation-delay: 4.4s; }
+    .terminal-rain span:nth-child(5) { left: 8%; top: 48%; animation-delay: 5.7s; }
+    .terminal-rain span:nth-child(6) { left: 48%; top: 88%; animation-delay: 7s; }
+    .terminal-rain span:nth-child(7) { left: 82%; top: 28%; animation-delay: 8.3s; }
+    .terminal-rain span:nth-child(8) { left: 34%; top: 34%; animation-delay: 9.6s; }
+
+    .brand-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-mark {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: white;
+      font-weight: 900;
+      letter-spacing: -1px;
+      box-shadow: 0 0 34px rgba(56, 189, 248, 0.28);
+    }
+
+    .brand-bar strong {
+      display: block;
+      font-size: 18px;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-bar span {
+      display: block;
+      color: #93a4bb;
+      font-size: 12px;
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(76, 154, 255, 0.18);
+      top: -95px;
+      right: -95px;
+      filter: blur(8px);
+    }
+
+    .tag {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(59, 130, 246, 0.16);
+      color: #9dccff;
+      font-size: 13px;
+      letter-spacing: 0.4px;
+      margin-bottom: 22px;
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 0.95;
+      margin-bottom: 20px;
+      letter-spacing: -2px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero p {
+      color: #b7c5da;
+      font-size: 17px;
+      line-height: 1.6;
+      margin-bottom: 22px;
+      max-width: 560px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .clouds {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 24px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .cloud {
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .cloud strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 15px;
+    }
+
+    .cloud span {
+      font-size: 12px;
+      color: #9fb1ca;
+      line-height: 1.4;
+    }
+
+    .avatar-stage {
+      margin-top: 24px;
+      min-height: 320px;
+      border-radius: 28px;
+      background: linear-gradient(145deg, rgba(17, 24, 39, 0.8), rgba(15, 23, 42, 0.45));
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(148, 163, 184, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: radial-gradient(circle, black, transparent 76%);
+    }
+
+    .avatar {
+      position: relative;
+      width: 145px;
+      height: 220px;
+      animation: float 2.4s ease-in-out infinite;
+      z-index: 4;
+      transition: transform 0.35s ease, filter 0.35s ease;
+    }
+
+    .avatar.pulse {
+      animation: float 2.4s ease-in-out infinite, pulse 0.55s ease;
+    }
+
+    .head {
+      width: 82px;
+      height: 82px;
+      background: linear-gradient(135deg, #dbeafe, #93c5fd);
+      border-radius: 28px;
+      position: absolute;
+      top: 8px;
+      left: 31px;
+      box-shadow: inset -8px -10px 0 rgba(30, 64, 175, 0.18), 0 0 26px rgba(96, 165, 250, 0.48);
+    }
+
+    .visor {
+      position: absolute;
+      width: 54px;
+      height: 18px;
+      background: #07111f;
+      border-radius: 999px;
+      top: 33px;
+      left: 14px;
+      box-shadow: 0 0 18px rgba(34, 211, 238, 0.8);
+    }
+
+    .visor::after {
+      content: "";
+      position: absolute;
+      width: 28px;
+      height: 5px;
+      background: #67e8f9;
+      border-radius: 999px;
+      top: 6px;
+      left: 13px;
+    }
+
+    .body {
+      width: 100px;
+      height: 104px;
+      background: linear-gradient(135deg, var(--avatar-main, #1e3a8a), #0f172a);
+      border: 1px solid rgba(147, 197, 253, 0.38);
+      border-radius: 30px 30px 24px 24px;
+      position: absolute;
+      top: 90px;
+      left: 22px;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35), 0 0 30px var(--avatar-glow, rgba(59, 130, 246, 0.24));
+      transition: background 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .badge {
+      position: absolute;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: rgba(34, 211, 238, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.5);
+      top: 23px;
+      left: 29px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #67e8f9;
+      font-size: 20px;
+      transition: transform 0.25s ease;
+    }
+
+    .arm-left, .arm-right {
+      width: 22px;
+      height: 82px;
+      background: linear-gradient(180deg, #60a5fa, #1d4ed8);
+      border-radius: 999px;
+      position: absolute;
+      top: 101px;
+      transform-origin: top;
+    }
+
+    .arm-left {
+      left: 5px;
+      transform: rotate(18deg);
+    }
+
+    .arm-right {
+      right: 5px;
+      transform: rotate(-18deg);
+      animation: scan 1.8s ease-in-out infinite;
+    }
+
+    .leg-left, .leg-right {
+      width: 25px;
+      height: 68px;
+      background: linear-gradient(180deg, #1d4ed8, #111827);
+      border-radius: 999px;
+      position: absolute;
+      top: 184px;
+    }
+
+    .leg-left {
+      left: 38px;
+      transform: rotate(6deg);
+    }
+
+    .leg-right {
+      right: 38px;
+      transform: rotate(-6deg);
+    }
+
+    .orb {
+      position: absolute;
+      width: 74px;
+      height: 74px;
+      border-radius: 28px;
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(147, 197, 253, 0.36);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #dbeafe;
+      font-weight: bold;
+      box-shadow: 0 0 32px rgba(59, 130, 246, 0.25);
+      z-index: 1;
+      animation: orbitGlow 3s ease-in-out infinite;
+    }
+
+    .orb.one {
+      top: 35px;
+      left: 46px;
+    }
+
+    .orb.two {
+      bottom: 42px;
+      right: 46px;
+      animation-delay: 0.6s;
+    }
+
+    .orb.three {
+      top: 58px;
+      right: 56px;
+      animation-delay: 1.2s;
+    }
+
+    .alert-feed {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 16px;
+      display: grid;
+      gap: 8px;
+      z-index: 5;
+    }
+
+    .mini-alert {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 11px;
+      border-radius: 14px;
+      background: rgba(2, 6, 23, 0.62);
+      border: 1px solid rgba(125, 211, 252, 0.18);
+      color: #cfe9ff;
+      font-size: 11px;
+      transform: translateX(-8px);
+      opacity: 0;
+      animation: alertIn 5.8s ease-in-out infinite;
+    }
+
+    .mini-alert:nth-child(2) {
+      animation-delay: 1.3s;
+    }
+
+    .mini-alert:nth-child(3) {
+      animation-delay: 2.6s;
+    }
+
+    .severity {
+      padding: 4px 7px;
+      border-radius: 999px;
+      background: rgba(248, 113, 113, 0.12);
+      color: #fecaca;
+      border: 1px solid rgba(248, 113, 113, 0.28);
+      white-space: nowrap;
+    }
+
+    .card {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      min-height: 700px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro, .quiz, .result {
+      position: relative;
+      z-index: 2;
+    }
+
+    .intro {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      text-align: left;
+    }
+
+    .intro-label {
+      color: #7dd3fc;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .intro h2 {
+      font-size: clamp(32px, 4vw, 48px);
+      line-height: 1.02;
+      letter-spacing: -1.4px;
+    }
+
+    .intro p {
+      color: #b7c5da;
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin: 8px 0;
+    }
+
+    .mission-item {
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #dbeafe;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .progress-wrap {
+      margin-bottom: 22px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      color: #a8b9d2;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .progress {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+
+    .risk-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 18px;
+    }
+
+    .risk-label {
+      color: #9fb1ca;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .risk-track {
+      height: 9px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .risk-fill {
+      height: 100%;
+      width: 78%;
+      background: linear-gradient(90deg, #22c55e, #facc15, #fb7185);
+      transition: width 0.35s ease;
+    }
+
+    .risk-number {
+      min-width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(251, 113, 133, 0.12);
+      color: #fecdd3;
+      border: 1px solid rgba(251, 113, 133, 0.28);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .scenario {
+      color: #7dd3fc;
+      font-size: 14px;
+      margin-bottom: 10px;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+
+    .question {
+      font-size: 27px;
+      line-height: 1.22;
+      margin-bottom: 20px;
+      letter-spacing: -0.7px;
+    }
+
+    .context {
+      color: #b7c5da;
+      line-height: 1.55;
+      margin-bottom: 24px;
+      font-size: 15px;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      border-radius: 18px;
+      font-weight: 700;
+      transition: transform 0.18s ease, border 0.18s ease, background 0.18s ease;
+    }
+
+    .option {
+      text-align: left;
+      padding: 16px 17px;
+      background: rgba(255, 255, 255, 0.065);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      color: #eef5ff;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .option:hover {
+      transform: translateY(-2px);
+      background: rgba(59, 130, 246, 0.16);
+      border-color: rgba(125, 211, 252, 0.5);
+    }
+
+    .quiz {
+      display: none;
+    }
+
+    .result {
+      display: none;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      gap: 18px;
+      text-align: center;
+    }
+
+    .certificate-label {
+      width: fit-content;
+      margin: 0 auto -6px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      color: #bae6fd;
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .result-card {
+      padding: 30px;
+      border-radius: 32px;
+      background: radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 34%), linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.72));
+      border: 1px solid rgba(125, 211, 252, 0.34);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 24px 60px rgba(0, 0, 0, 0.3), 0 0 50px rgba(56, 189, 248, 0.08);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::after {
+      content: "validated cloud profile";
+      position: absolute;
+      right: -28px;
+      top: 22px;
+      transform: rotate(35deg);
+      padding: 8px 42px;
+      background: rgba(34, 211, 238, 0.12);
+      border: 1px solid rgba(125, 211, 252, 0.18);
+      color: rgba(224, 242, 254, 0.74);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .result-icon {
+      width: 116px;
+      height: 116px;
+      margin: 0 auto 16px;
+      border-radius: 34px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.24), rgba(168, 85, 247, 0.22));
+      border: 1px solid rgba(125, 211, 252, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      box-shadow: 0 0 48px rgba(56, 189, 248, 0.22);
+    }
+
+    .result h2 {
+      font-size: 38px;
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 10px;
+    }
+
+    .result p {
+      color: #b7c5da;
+      line-height: 1.6;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .result-meta {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 18px 0 2px;
+    }
+
+    .pill {
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(14, 165, 233, 0.12);
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      color: #bae6fd;
+      font-size: 12px;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .score {
+      padding: 14px 10px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .score strong {
+      display: block;
+      font-size: 22px;
+      color: #7dd3fc;
+    }
+
+    .score span {
+      font-size: 12px;
+      color: #93a4bb;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .start-actions {
+      justify-content: flex-start;
+      margin-top: 8px;
+    }
+
+    .start-actions button {
+      min-width: 210px;
+    }
+
+    .primary, .secondary {
+      padding: 14px 18px;
+      font-size: 14px;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: white;
+      box-shadow: 0 14px 34px rgba(59, 130, 246, 0.24);
+    }
+
+    .primary.linkedin {
+      background: linear-gradient(135deg, #0a66c2, #2563eb);
+    }
+
+    .secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .primary:hover, .secondary:hover {
+      transform: translateY(-2px);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: #e0f2fe;
+      border: 1px solid rgba(125, 211, 252, 0.35);
+      border-radius: 999px;
+      padding: 12px 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+      z-index: 20;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @keyframes scan {
+      0%, 100% { transform: rotate(-18deg); }
+      50% { transform: rotate(-48deg); }
+    }
+
+    @keyframes pulse {
+      0% { filter: brightness(1); }
+      50% { filter: brightness(1.35); }
+      100% { filter: brightness(1); }
+    }
+
+    @keyframes orbitGlow {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.82; }
+      50% { transform: translateY(-7px) scale(1.04); opacity: 1; }
+    }
+
+    @keyframes alertIn {
+      0% { opacity: 0; transform: translateX(-8px); }
+      16% { opacity: 1; transform: translateX(0); }
+      70% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 0; transform: translateX(8px); }
+    }
+
+    @keyframes rainMove {
+      0% { transform: translateY(0); opacity: 0; }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { transform: translateY(-46px); opacity: 0; }
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero, .card {
+        padding: 22px;
+        border-radius: 22px;
+      }
+
+      .clouds, .score-grid, .mission-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .question {
+        font-size: 23px;
+      }
+
+      .result h2 {
+        font-size: 30px;
+      }
+
+      .avatar-stage {
+        min-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal-rain">
+    <span>sign-in risk detected</span>
+    <span>iam policy changed</span>
+    <span>public bucket found</span>
+    <span>conditional access required</span>
+    <span>guardduty finding active</span>
+    <span>cloud logging enabled</span>
+    <span>siem correlation running</span>
+    <span>incident timeline created</span>
+  </div>
+  <main class="page">
+    <section class="container">
+      <div class="hero">
+        <div class="brand-bar">
+          <div class="brand-mark">CSQ</div>
+          <div>
+            <strong>cloud security quest</strong>
+            <span>beta lab | microsoft | aws | gcp</span>
+          </div>
+        </div>
+        <div class="tag">interactive security lab</div>
+        <h1>qual perfil de segurança você seria em uma crise multi-cloud?</h1>
+        <p>responda cenários rápidos envolvendo microsoft, aws e gcp. no final, receba um card de perfil para copiar e comentar no linkedin.</p>
+
+        <div class="clouds">
+          <div class="cloud">
+            <strong>microsoft</strong>
+            <span>entra id, defender, mfa, conditional access e identidade.</span>
+          </div>
+          <div class="cloud">
+            <strong>aws</strong>
+            <span>ec2, security groups, guardduty, iam e waf.</span>
+          </div>
+          <div class="cloud">
+            <strong>gcp</strong>
+            <span>iam, cloud storage, logging, posture e políticas.</span>
+          </div>
+        </div>
+
+        <div class="avatar-stage">
+          <div class="grid-bg"></div>
+          <div class="orb one">365</div>
+          <div class="orb two">aws</div>
+          <div class="orb three">gcp</div>
+          <div class="avatar" id="avatar">
+            <div class="head"><div class="visor"></div></div>
+            <div class="body"><div class="badge" id="badge">🛡️</div></div>
+            <div class="arm-left"></div>
+            <div class="arm-right"></div>
+            <div class="leg-left"></div>
+            <div class="leg-right"></div>
+          </div>
+          <div class="alert-feed">
+            <div class="mini-alert"><span>entra id: sign-in risk detected</span><strong class="severity">high</strong></div>
+            <div class="mini-alert"><span>aws: public exposure detected</span><strong class="severity">critical</strong></div>
+            <div class="mini-alert"><span>gcp: bucket policy review</span><strong class="severity">medium</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="intro" id="intro">
+          <div class="intro-label">missão interativa</div>
+          <h2>entre na simulação e tome decisões como se estivesse em um incidente real.</h2>
+          <p>cada escolha altera seu nível de risco, muda o avatar e pontua seu perfil entre identidade, detecção, cloud security e gestão de crise.</p>
+          <div class="mission-grid">
+            <div class="mission-item">cenários com microsoft defender, entra id e conditional access</div>
+            <div class="mission-item">decisões sobre aws, security groups, guardduty e iam</div>
+            <div class="mission-item">respostas para gcp, buckets públicos, logs e governança</div>
+            <div class="mission-item">resultado final em card pronto para linkedin</div>
+          </div>
+          <div class="actions start-actions">
+            <button class="primary" id="startBtn">iniciar missão</button>
+            <button class="primary linkedin" id="shareStartBtn">compartilhar no linkedin</button>
+          </div>
+        </div>
+
+        <div class="quiz" id="quiz">
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <span id="step">cenário 1 de 6</span>
+              <span id="risk">risco inicial: alto</span>
+            </div>
+            <div class="progress"><div class="bar" id="bar"></div></div>
+          </div>
+
+          <div class="risk-panel">
+            <div>
+              <div class="risk-label">nível de risco da operação</div>
+              <div class="risk-track"><div class="risk-fill" id="riskFill"></div></div>
+            </div>
+            <div class="risk-number" id="riskNumber">78</div>
+          </div>
+
+          <div class="scenario" id="scenario"></div>
+          <h2 class="question" id="question"></h2>
+          <p class="context" id="context"></p>
+          <div class="options" id="options"></div>
+        </div>
+
+        <div class="result" id="result">
+          <div class="certificate-label">cloud security quest | resultado da missão</div>
+          <div class="result-card" id="shareCard">
+            <div class="result-icon" id="resultIcon">🛡️</div>
+            <h2 id="resultTitle"></h2>
+            <p id="resultText"></p>
+            <div class="result-meta">
+              <span class="pill" id="levelPill">nível: avançado</span>
+              <span class="pill" id="specialtyPill">especialidade: cloud security</span>
+              <span class="pill">ambiente: microsoft | aws | gcp</span>
+            </div>
+          </div>
+
+          <div class="score-grid">
+            <div class="score"><strong id="identityScore">0</strong><span>identidade</span></div>
+            <div class="score"><strong id="detectScore">0</strong><span>detecção</span></div>
+            <div class="score"><strong id="cloudScore">0</strong><span>cloud</span></div>
+            <div class="score"><strong id="crisisScore">0</strong><span>crise</span></div>
+          </div>
+          <div class="actions">
+            <button class="primary" id="copyBtn">copiar resultado</button>
+            <button class="primary linkedin" id="linkedinBtn">compartilhar no linkedin</button>
+            <button class="secondary" id="restartBtn">refazer simulação</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">resultado copiado</div>
+
+  <script>
+    const questions = [
+      {
+        scenario: "microsoft 365",
+        question: "um usuário iniciou sessão de localidade incomum e tentou acessar dados sensíveis. qual sua primeira ação?",
+        context: "o alerta apareceu no microsoft defender e há indícios de risco associado à identidade no entra id.",
+        options: [
+          { text: "bloquear a sessão, exigir mfa e revisar conditional access", scores: { identity: 3, detect: 1, cloud: 0, crisis: 1 }, risk: -12, badge: "🔐" },
+          { text: "analisar logs no defender antes de qualquer contenção", scores: { identity: 1, detect: 3, cloud: 0, crisis: 0 }, risk: -7, badge: "📡" },
+          { text: "acionar comunicação e abrir ponte de crise imediatamente", scores: { identity: 0, detect: 1, cloud: 0, crisis: 3 }, risk: -5, badge: "🎯" },
+          { text: "validar permissões e revisar grupos privilegiados", scores: { identity: 3, detect: 0, cloud: 1, crisis: 0 }, risk: -9, badge: "🧬" }
+        ]
+      },
+      {
+        scenario: "aws",
+        question: "uma instância ec2 crítica está exposta publicamente com porta sensível aberta. o que você prioriza?",
+        context: "o ambiente está em produção e o tráfego externo aumentou nos últimos minutos.",
+        options: [
+          { text: "restringir security group e validar origem permitida", scores: { identity: 0, detect: 1, cloud: 3, crisis: 1 }, risk: -13, badge: "☁️" },
+          { text: "ativar guardduty e correlacionar achados recentes", scores: { identity: 0, detect: 3, cloud: 2, crisis: 0 }, risk: -8, badge: "🛰️" },
+          { text: "acionar plano de crise por risco em produção", scores: { identity: 0, detect: 1, cloud: 1, crisis: 3 }, risk: -6, badge: "🚨" },
+          { text: "revisar iam e remover permissões excessivas", scores: { identity: 2, detect: 0, cloud: 2, crisis: 0 }, risk: -7, badge: "🔑" }
+        ]
+      },
+      {
+        scenario: "gcp",
+        question: "um bucket foi identificado com exposição pública indevida. qual decisão você toma?",
+        context: "há risco de vazamento de dados e a origem da alteração ainda não foi confirmada.",
+        options: [
+          { text: "corrigir iam e remover acesso público imediatamente", scores: { identity: 2, detect: 0, cloud: 3, crisis: 1 }, risk: -12, badge: "🧱" },
+          { text: "habilitar logs, trilha de auditoria e alerta preventivo", scores: { identity: 0, detect: 3, cloud: 2, crisis: 0 }, risk: -8, badge: "📊" },
+          { text: "abrir incidente formal e registrar impacto potencial", scores: { identity: 0, detect: 1, cloud: 1, crisis: 3 }, risk: -5, badge: "📋" },
+          { text: "criar política organizacional para prevenir recorrência", scores: { identity: 1, detect: 0, cloud: 3, crisis: 1 }, risk: -9, badge: "🏛️" }
+        ]
+      },
+      {
+        scenario: "soc e siem",
+        question: "o siem correlacionou múltiplas tentativas internas entre servidores. como você conduz a análise?",
+        context: "o padrão pode indicar varredura lateral, automação legítima ou diagnóstico operacional.",
+        options: [
+          { text: "validar origem, destino, portas e comportamento histórico", scores: { identity: 0, detect: 3, cloud: 1, crisis: 0 }, risk: -10, badge: "🔎" },
+          { text: "isolar rapidamente ativos envolvidos para reduzir impacto", scores: { identity: 0, detect: 1, cloud: 1, crisis: 2 }, risk: -6, badge: "🧯" },
+          { text: "acionar donos dos ativos antes de bloquear tráfego", scores: { identity: 0, detect: 1, cloud: 0, crisis: 3 }, risk: -6, badge: "🤝" },
+          { text: "criar regra de detecção e baseline para recorrência", scores: { identity: 0, detect: 3, cloud: 1, crisis: 1 }, risk: -9, badge: "⚙️" }
+        ]
+      },
+      {
+        scenario: "devsecops",
+        question: "um pipeline publicou recurso cloud sem validação de segurança. qual solução você implementa?",
+        context: "o time quer manter velocidade, mas precisa reduzir erro humano e exposição indevida.",
+        options: [
+          { text: "implementar validação de iac com política como código", scores: { identity: 0, detect: 1, cloud: 3, crisis: 0 }, risk: -12, badge: "🧩" },
+          { text: "bloquear deploys críticos sem aprovação formal", scores: { identity: 0, detect: 0, cloud: 1, crisis: 3 }, risk: -4, badge: "🛑" },
+          { text: "criar monitoramento contínuo de postura cloud", scores: { identity: 0, detect: 3, cloud: 2, crisis: 0 }, risk: -9, badge: "📈" },
+          { text: "integrar secrets, identidade e privilégio mínimo", scores: { identity: 3, detect: 0, cloud: 2, crisis: 0 }, risk: -10, badge: "🗝️" }
+        ]
+      },
+      {
+        scenario: "gestão de crise",
+        question: "o incidente envolve microsoft, aws, gcp e times diferentes. qual postura mais combina com você?",
+        context: "há pressão por resposta rápida, mas decisões precipitadas podem gerar indisponibilidade.",
+        options: [
+          { text: "priorizar contenção, comunicação e responsáveis por frente", scores: { identity: 0, detect: 1, cloud: 1, crisis: 3 }, risk: -8, badge: "🧭" },
+          { text: "centralizar evidências e criar linha do tempo técnica", scores: { identity: 0, detect: 3, cloud: 0, crisis: 1 }, risk: -9, badge: "🕒" },
+          { text: "corrigir controles cloud e revisar arquitetura", scores: { identity: 0, detect: 0, cloud: 3, crisis: 1 }, risk: -10, badge: "🏗️" },
+          { text: "revisar identidades privilegiadas em todos os ambientes", scores: { identity: 3, detect: 1, cloud: 1, crisis: 0 }, risk: -11, badge: "👁️" }
+        ]
+      }
+    ];
+
+    const profiles = [
+      {
+        key: "identity",
+        icon: "🔐",
+        title: "identity defender",
+        specialty: "identidade e acesso",
+        color: "#2563eb",
+        glow: "rgba(59, 130, 246, 0.45)",
+        text: "você pensa primeiro em identidade, privilégio mínimo, mfa, conditional access e controle de acesso. seu foco é impedir que uma credencial vire uma crise maior."
+      },
+      {
+        key: "detect",
+        icon: "📡",
+        title: "threat hunter",
+        specialty: "detecção e resposta",
+        color: "#0891b2",
+        glow: "rgba(34, 211, 238, 0.42)",
+        text: "você busca evidências antes de agir, cruza logs, entende padrões e transforma sinais dispersos em uma investigação consistente."
+      },
+      {
+        key: "cloud",
+        icon: "☁️",
+        title: "cloud security architect",
+        specialty: "arquitetura cloud",
+        color: "#7c3aed",
+        glow: "rgba(168, 85, 247, 0.42)",
+        text: "você olha para arquitetura, exposição, governança, iam, waf, logging e segurança por desenho em microsoft, aws e gcp."
+      },
+      {
+        key: "crisis",
+        icon: "🧭",
+        title: "incident commander",
+        specialty: "gestão de crise",
+        color: "#dc2626",
+        glow: "rgba(248, 113, 113, 0.38)",
+        text: "você organiza prioridades, reduz impacto, comunica riscos e mantém o time alinhado quando o ambiente está sob pressão."
+      }
+    ];
+
+    let index = 0;
+    let riskScore = 78;
+    let scores = { identity: 0, detect: 0, cloud: 0, crisis: 0 };
+    let lastProfile = null;
+
+    const startBtn = document.getElementById("startBtn");
+    const shareStartBtn = document.getElementById("shareStartBtn");
+    const intro = document.getElementById("intro");
+    const step = document.getElementById("step");
+    const risk = document.getElementById("risk");
+    const bar = document.getElementById("bar");
+    const riskFill = document.getElementById("riskFill");
+    const riskNumber = document.getElementById("riskNumber");
+    const scenario = document.getElementById("scenario");
+    const question = document.getElementById("question");
+    const context = document.getElementById("context");
+    const options = document.getElementById("options");
+    const quiz = document.getElementById("quiz");
+    const result = document.getElementById("result");
+    const resultIcon = document.getElementById("resultIcon");
+    const resultTitle = document.getElementById("resultTitle");
+    const resultText = document.getElementById("resultText");
+    const identityScore = document.getElementById("identityScore");
+    const detectScore = document.getElementById("detectScore");
+    const cloudScore = document.getElementById("cloudScore");
+    const crisisScore = document.getElementById("crisisScore");
+    const copyBtn = document.getElementById("copyBtn");
+    const linkedinBtn = document.getElementById("linkedinBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const toast = document.getElementById("toast");
+    const badge = document.getElementById("badge");
+    const avatar = document.getElementById("avatar");
+    const levelPill = document.getElementById("levelPill");
+    const specialtyPill = document.getElementById("specialtyPill");
+
+    function updateRisk() {
+      const value = Math.max(8, Math.min(95, riskScore));
+      riskNumber.textContent = value;
+      riskFill.style.width = `${value}%`;
+      risk.textContent = value >= 70 ? "risco: crítico" : value >= 45 ? "risco: em contenção" : "risco: controlado";
+    }
+
+    function renderQuestion() {
+      const current = questions[index];
+      step.textContent = `cenário ${index + 1} de ${questions.length}`;
+      bar.style.width = `${(index / questions.length) * 100}%`;
+      scenario.textContent = current.scenario;
+      question.textContent = current.question;
+      context.textContent = current.context;
+      options.innerHTML = "";
+      updateRisk();
+
+      current.options.forEach((option) => {
+        const button = document.createElement("button");
+        button.className = "option";
+        button.textContent = option.text;
+        button.addEventListener("click", () => choose(option));
+        options.appendChild(button);
+      });
+    }
+
+    function choose(option) {
+      Object.keys(scores).forEach((key) => {
+        scores[key] += option.scores[key] || 0;
+      });
+
+      riskScore += option.risk;
+      badge.textContent = option.badge;
+      badge.style.transform = "scale(1.18)";
+      avatar.classList.remove("pulse");
+      void avatar.offsetWidth;
+      avatar.classList.add("pulse");
+      setTimeout(() => badge.style.transform = "scale(1)", 220);
+      index++;
+
+      if (index >= questions.length) {
+        showResult();
+      } else {
+        renderQuestion();
+      }
+    }
+
+    function showResult() {
+      bar.style.width = "100%";
+      riskScore = Math.max(8, riskScore);
+      updateRisk();
+      const winnerKey = Object.keys(scores).sort((a, b) => scores[b] - scores[a])[0];
+      lastProfile = profiles.find((profile) => profile.key === winnerKey);
+
+      document.documentElement.style.setProperty("--avatar-main", lastProfile.color);
+      document.documentElement.style.setProperty("--avatar-glow", lastProfile.glow);
+      quiz.style.display = "none";
+      result.style.display = "flex";
+      resultIcon.textContent = lastProfile.icon;
+      resultTitle.textContent = lastProfile.title;
+      resultText.textContent = lastProfile.text;
+      identityScore.textContent = scores.identity;
+      detectScore.textContent = scores.detect;
+      cloudScore.textContent = scores.cloud;
+      crisisScore.textContent = scores.crisis;
+      badge.textContent = lastProfile.icon;
+      levelPill.textContent = riskScore <= 25 ? "nível: avançado" : riskScore <= 45 ? "nível: intermediário" : "nível: sob pressão";
+      specialtyPill.textContent = `especialidade: ${lastProfile.specialty}`;
+    }
+
+    function start() {
+      intro.style.display = "none";
+      quiz.style.display = "block";
+      renderQuestion();
+    }
+
+    function restart() {
+      index = 0;
+      riskScore = 78;
+      scores = { identity: 0, detect: 0, cloud: 0, crisis: 0 };
+      lastProfile = null;
+      quiz.style.display = "none";
+      result.style.display = "none";
+      intro.style.display = "flex";
+      badge.textContent = "🛡️";
+      document.documentElement.style.setProperty("--avatar-main", "#1e3a8a");
+      document.documentElement.style.setProperty("--avatar-glow", "rgba(59, 130, 246, 0.24)");
+      updateRisk();
+    }
+
+    function buildShareText() {
+      const level = levelPill.textContent.replace("nível: ", "");
+      return `meu resultado no cloud security quest foi: ${lastProfile.title}. nível: ${level}. especialidade: ${lastProfile.specialty}. ambiente: microsoft | aws | gcp. ${lastProfile.text}`;
+    }
+
+    async function copyResult() {
+      await navigator.clipboard.writeText(buildShareText());
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function shareLinkedIn() {
+      const text = encodeURIComponent(buildShareText());
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&summary=${text}`, "_blank");
+    }
+
+    function shareStartLinkedIn() {
+      const text = encodeURIComponent("criei um mini game interativo de cloud security com cenários envolvendo microsoft, aws, gcp, soc e gestão de incidentes. entre no link, jogue e descubra seu perfil de segurança.");
+      const url = encodeURIComponent(window.location.href);
+      window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&summary=${text}`, "_blank");
+    }
+
+    startBtn.addEventListener("click", start);
+    shareStartBtn.addEventListener("click", shareStartLinkedIn);
+    copyBtn.addEventListener("click", copyResult);
+    linkedinBtn.addEventListener("click", shareLinkedIn);
+    restartBtn.addEventListener("click", restart);
+    updateRisk();
+  </script>
+</body>
+</html>
